@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Will You Be My Valentine?</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    .card {
+      background: white;
+      width: 90%;
+      max-width: 360px;
+      padding: 32px 24px;
+      border-radius: 22px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+      text-align: center;
+      z-index: 2;
+      animation: popIn 0.8s ease;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    h1 {
+      color: #e63946;
+      margin-bottom: 10px;
+      font-size: 26px;
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 22px;
+      line-height: 1.4;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      flex: 1;
+      min-width: 130px;
+      padding: 14px 0;
+      font-size: 18px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    #yes {
+      background: #e63946;
+      color: white;
+      font-weight: 600;
+    }
+
+    #no {
+      background: #adb5bd;
+      color: white;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-110vh) translateX(40px);
+        opacity: 0;
+      }
+    }
+
+    /* Firework particles */
+    .particle {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card" id="card">
+    <h1>Hey ❤️</h1>
+    <p>
+      Life feels better with you in it.<br>
+      So I wanted to ask you properly…
+    </p>
+
+    <h2>Will you be my Valentine? 💘</h2>
+
+    <div class="buttons">
+      <button id="yes">Yes 😍</button>
+      <button id="no">No 🙄</button>
+    </div>
+  </div>
+
+  <script>
+    // Floating hearts generator
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (4 + Math.random() * 3) + 's';
+      document.body.appendChild(heart);
+
+      setTimeout(() => heart.remove(), 7000);
+    }
+
+    setInterval(createHeart, 500);
+
+    // No button escape (mobile-friendly)
+    const noBtn = document.getElementById('no');
+    noBtn.addEventListener('touchstart', moveNo);
+    noBtn.addEventListener('mouseover', moveNo);
+
+    function moveNo() {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 200 - 100;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    }
+
+    // Fireworks on YES
+    document.getElementById('yes').addEventListener('click', () => {
+      fireworkBurst();
+      document.body.innerHTML = `
+        <div style="
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          height:100vh;
+          background:linear-gradient(135deg,#ffccd5,#ff8fab);
+          font-family:system-ui;
+          text-align:center;
+        ">
+          <h1 style="color:#e63946;font-size:28px;">
+            YAYYY!! 💖🥰<br><br>
+            Happy Valentine’s Day ❤️
+          </h1>
+        </div>
+      `;
+    });
+
+    function fireworkBurst() {
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.background = `hsl(${Math.random()*360},100%,60%)`;
+        p.style.left = '50%';
+        p.style.top = '50%';
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 200;
+
+        document.body.appendChild(p);
+
+        p.animate([
+          { transform: 'translate(0,0)', opacity: 1 },
+          {
+            transform: `translate(${Math.cos(angle)*distance}px, ${Math.sin(angle)*distance}px)`,
+            opacity: 0
+          }
+        ], {
+          duration: 800,
+          easing: 'ease-out'
+        });
+
+        setTimeout(() => p.remove(), 800);
+      }
+    }
+  </script>
+
+</body>
+</html>
